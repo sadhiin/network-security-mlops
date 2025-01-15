@@ -2,3 +2,7 @@ python-dotenv
 pandas
 numpy==1.26.4
 scikit-learn
+pymongo
+certifi
+
+# - e .
