@@ -2,14 +2,25 @@ import logging
 import os
 from datetime import datetime
 
-LOG_FILE = f"{datetime.now().strftime('%Y-%m-%d')}.log"
-log_path = os.path.join(os.getcwd(),"logs", LOG_FILE)
-os.makedirs(log_path, exist_ok=True)
 
-LOG_FILE_PATH = os.path.join(log_path, LOG_FILE)
-logging.basicConfig(
-    filename=LOG_FILE_PATH,
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
+def create_logger(name="my_logger", filename=f"{datetime.now().strftime('%Y-%m-%d')}.log"):
+    log_dir = './logs'
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
 
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+
+    log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(filename)s - %(lineno)d - %(message)s')
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+    console_handler.setFormatter(log_format)
+    logger.addHandler(console_handler)
+
+    file_handler = logging.FileHandler(os.path.join(log_dir, filename))
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(log_format)
+    logger.addHandler(file_handler)
+
+    return logger
