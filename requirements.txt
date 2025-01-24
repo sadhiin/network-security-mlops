@@ -8,4 +8,4 @@ pymongo[srv]==3.11
 scikit-learn
 mlflow
 PyYAML
-# - e .
+- e .

@@ -92,7 +92,6 @@ class ModelTrainer:
                 "AdaBoostClassifier": {
                     'n_estimators': [50, 100, 200],
                     'learning_rate': [0.01, 0.1, 1]
-                    # Removed 'algorithm' parameter
                 },
 
                 "GradientBoostingClassifier": {
