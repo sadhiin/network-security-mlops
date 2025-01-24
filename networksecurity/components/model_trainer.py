@@ -19,6 +19,12 @@ from sklearn.ensemble import (
     GradientBoostingClassifier
 )
 import mlflow
+import dagshub
+dagshub.init(repo_owner='sadhiin', repo_name='network-security-mlops', mlflow=True)
+
+
+  
+  
 logger = create_logger(__name__)
 
 
@@ -97,7 +103,7 @@ class ModelTrainer:
                 "GradientBoostingClassifier": {
                     'n_estimators': [50, 100, 200],
                     'learning_rate': [0.01, 0.1, 0.5],
-                    'max_depth': [3, 4, 5],
+                    'max_depth': [3, 5, 7, 11],
                     'min_samples_split': [2, 5],
                     'min_samples_leaf': [1, 2],
                     'subsample': [0.8, 0.9, 1.0],
@@ -118,7 +124,7 @@ class ModelTrainer:
             ## track the model and metrics on mlflow for both train and test data
             
             classification_metric_train = get_classification_score(y_train, y_train_pred)
-            self.__track_model_on_mlflow(best_model,classification_metric_train)
+            # self.__track_model_on_mlflow(best_model,classification_metric_train)
             classification_metric_test = get_classification_score(y_test, y_test_pred)
             self.__track_model_on_mlflow(best_model,classification_metric_test)
 
@@ -131,6 +137,9 @@ class ModelTrainer:
             network_security_model = NetworkSecurityModel(preprocessor=_prerocessor, model=best_model)
             save_object(model_file_path, network_security_model)
 
+            save_object('final_model/model.pkl', best_model)
+            save_object('final_model/preprocessor.pkl', _prerocessor)
+            
             # model trainer artifact
             model_trainer_artifact = ModelTrainerArtifact(
                 trained_model_file_path=model_file_path,
