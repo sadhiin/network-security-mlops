@@ -32,6 +32,7 @@ class ModelTrainer:
         except Exception as e:
             raise NetworkSecurityException(e, sys.exc_info())
 
+
     def _train_model(self, X_train:np.array, y_train:np.array, X_test:np.array, y_test:np.array)->ModelTrainerArtifact:
         try:
             models = {
@@ -94,7 +95,7 @@ class ModelTrainer:
                                            models, params)
 
             ## to get the best model name from the report
-            best_model_name = max(model_report, key=lambda x: model_report[x]['f1_score'])
+            best_model_name = max(model_report, key=lambda x: model_report[x][1])
             best_model = models[best_model_name]
             y_train_pred = best_model.predict(X_train)
             y_test_pred = best_model.predict(X_test)
