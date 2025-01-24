@@ -96,4 +96,12 @@ class DataTransformationConfig:
             self.data_transformation_dir,
             traning_pipeline.DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,
             traning_pipeline.TRANSFORMED_OBJECT_FILE_NAME)
-    
+
+
+
+class ModelTrainerConfig:
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.model_trainer_dir:str = os.path.join(
+            training_pipeline_config.artifact_dir,
+            traning_pipeline.MODEL_TRAINER_DIR_NAME)
+
