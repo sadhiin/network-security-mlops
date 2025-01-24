@@ -46,47 +46,48 @@ class ModelTrainer:
 
             params = {
                 "LogisticRegression": {
-                    'penalty': ['l1', 'l2'],
-                    'C': [0.001, 0.01, 0.1, 1, 10, 100],
-                    'solver': ['liblinear', 'saga'],
-                    'max_iter': [1000, 2000]
+                    'penalty': ['l2'],
+                    'C': [0.001, 0.01, 0.1, 1, 10],
+                    'solver': ['lbfgs', 'liblinear'],
+                    'max_iter': [500, 1000]
                 },
 
                 "KNeighborsClassifier": {
-                    'n_neighbors': [3, 5, 7, 9, 11],
+                    'n_neighbors': [3, 5, 7, 9],
                     'weights': ['uniform', 'distance'],
-                    'algorithm': ['auto', 'ball_tree', 'kd_tree'],
-                    'leaf_size': [20, 30, 40]
+                    'algorithm': ['auto', 'ball_tree'],
+                    'p': [1, 2]
                 },
 
                 "DecisionTreeClassifier": {
                     'criterion': ['gini', 'entropy'],
-                    'max_depth': [None, 5, 10, 15, 20],
+                    'max_depth': [3, 5, 7, None],
                     'min_samples_split': [2, 5, 10],
                     'min_samples_leaf': [1, 2, 4]
                 },
 
                 "RandomForestClassifier": {
                     'n_estimators': [50, 100, 200],
-                    'max_depth': [None, 10, 20, 30],
+                    'max_depth': [None, 10, 20],
                     'min_samples_split': [2, 5, 10],
-                    'min_samples_leaf': [1, 2, 4],
-                    'bootstrap': [True, False]
+                    'min_samples_leaf': [1, 2],
+                    'max_features': ['auto', 'sqrt', 'log2']
                 },
 
                 "AdaBoostClassifier": {
                     'n_estimators': [50, 100, 200],
-                    'learning_rate': [0.01, 0.1, 1],
-                    'algorithm': ['SAMME', 'SAMME.R']
+                    'learning_rate': [0.01, 0.1, 1]
+                    # Removed 'algorithm' parameter
                 },
 
                 "GradientBoostingClassifier": {
                     'n_estimators': [50, 100, 200],
                     'learning_rate': [0.01, 0.1, 0.5],
                     'max_depth': [3, 4, 5],
-                    'min_samples_split': [2, 5, 10],
-                    'min_samples_leaf': [1, 2, 4],
-                    'subsample': [0.8, 0.9, 1.0]
+                    'min_samples_split': [2, 5],
+                    'min_samples_leaf': [1, 2],
+                    'subsample': [0.8, 0.9, 1.0],
+                    'max_features': ['auto', 'sqrt']
                 }
             }
 
