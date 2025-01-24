@@ -1,4 +1,6 @@
 import sys
+
+from sklearn.metrics import accuracy_score
 from networksecurity.entity.artifact_entity import ClassificationMetricArtifact
 from networksecurity.exception import NetworkSecurityException
 from networksecurity.logging import create_logger
@@ -10,12 +12,13 @@ def get_classification_score(y_true, y_pred)->ClassificationMetricArtifact:
         f1_score_value = f1_score(y_true, y_pred)
         precision_score_value = precision_score(y_true, y_pred)
         recall_score_value = recall_score(y_true, y_pred)
-
+        accuracy_score_value = accuracy_score(y_true, y_pred)
         classification_metric = ClassificationMetricArtifact(
             f1_score=f1_score_value,
             precision_score=precision_score_value,
-            recall_score=recall_score_value)
+            recall_score=recall_score_value,
+            accuracy_score=accuracy_score_value)
         return classification_metric
-    
+
     except Exception as e:
         raise NetworkSecurityException(e, sys.exc_info())

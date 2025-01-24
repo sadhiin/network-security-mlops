@@ -18,7 +18,7 @@ from sklearn.ensemble import (
     AdaBoostClassifier,
     GradientBoostingClassifier
 )
-
+import mlflow
 logger = create_logger(__name__)
 
 
@@ -31,6 +31,21 @@ class ModelTrainer:
             self.data_transformation_artifact = data_transformation_artifact
         except Exception as e:
             raise NetworkSecurityException(e, sys.exc_info())
+
+
+    def __track_model_on_mlflow(self, model, classification_metric_train):
+        with mlflow.start_run():
+            f1_score = classification_metric_train.f1_score
+            precision_score = classification_metric_train.precision_score
+            recall_score = classification_metric_train.recall_score
+            accuracy_score = classification_metric_train.accuracy_score
+
+            mlflow.log_metric("f1_score", f1_score)
+            mlflow.log_metric("precision_score", precision_score)
+            mlflow.log_metric("recall_score", recall_score)
+            mlflow.log_metric("accuracy_score", accuracy_score)
+            mlflow.sklearn.log_model(model, "model")
+
 
 
     def _train_model(self, X_train:np.array, y_train:np.array, X_test:np.array, y_test:np.array)->ModelTrainerArtifact:
@@ -101,9 +116,13 @@ class ModelTrainer:
             y_train_pred = best_model.predict(X_train)
             y_test_pred = best_model.predict(X_test)
 
+            ## track the model and metrics on mlflow for both train and test data
+            
             classification_metric_train = get_classification_score(y_train, y_train_pred)
-            ## track the model on mlflow
+            self.__track_model_on_mlflow(best_model,classification_metric_train)
             classification_metric_test = get_classification_score(y_test, y_test_pred)
+            self.__track_model_on_mlflow(best_model,classification_metric_test)
+
 
             _prerocessor = load_object(self.data_transformation_artifact.transformed_object_file_path)
             model_dir_path= os.path.join(self.model_trainer_config.model_trainer_dir)
