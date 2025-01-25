@@ -2,7 +2,6 @@
 import os
 import sys
 import json
-import numpy as np
 import pandas as pd
 from networksecurity.logging import create_logger
 from networksecurity.exception import NetworkSecurityException
