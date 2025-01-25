@@ -13,7 +13,7 @@ class TrainingPipelineConfig:
         self.pipeline_name = traning_pipeline.PIPELINE_NAME
         self.artifact_name = traning_pipeline.ARTIFACT_DIR
         self.artifact_dir = os.path.join(self.artifact_name, self.timestemp)
-
+        self.model_dir = os.path.join('final_model')
 
 class DataIngestionConfig:
     def __init__(self, training_pipeline_config:TrainingPipelineConfig):

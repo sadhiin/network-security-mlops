@@ -46,3 +46,5 @@ MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD:float = 0.05
 
 SAVE_MODEL_DIR:str = "saved_models"
 MODEL_FILE_NAME:str = "model.pkl"
+
+TRAINING_BUCKET_NAME:str = "networksecurity-training-bucket"

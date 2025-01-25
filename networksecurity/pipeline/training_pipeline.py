@@ -17,17 +17,19 @@ from networksecurity.entity.artifact_entity import(
     DataTransformationArtifact,
     ModelTrainerArtifact
 )
+from networksecurity.constant.traning_pipeline import TRAINING_BUCKET_NAME
 
 from networksecurity.exception import NetworkSecurityException
 from networksecurity.logging import create_logger
-
+from networksecurity.cloud.s3_syncer import S3Sync
 
 logger = create_logger(__name__)
 
 class TrainingPipeline:
     def __init__(self):
         self.training_pipeline_config = TrainingPipelineConfig()
-
+        self.s3_sync = S3Sync()
+        
     def start_data_ingestion(self):
         try:
             self.data_ingestion_config = DataIngestionConfig(training_pipeline_config=self.training_pipeline_config)
@@ -79,13 +81,33 @@ class TrainingPipeline:
         except Exception as e:
             logger.error(f"Error in model training: {str(e)}")
             raise NetworkSecurityException(e, sys.exc_info())
-        
+    
+    def sync_artifact_dir_to_s3(self):
+        try:
+            aws_bucker_url = f"s3://{TRAINING_BUCKET_NAME}/artifact/{self.training_pipeline_config.timestemp}"
+            self.s3_sync.sync_folder_to_s3(self.training_pipeline_config.artifact_dir, aws_bucker_url)
+        except Exception as e:
+            logger.error(f"Error in syncing artifact to s3: {str(e)}")
+            raise NetworkSecurityException(e, sys.exc_info())
+    
+    def sync_saved_model_dir_to_s3(self):
+        try:
+            aws_bucker_url = f"s3://{TRAINING_BUCKET_NAME}/final_model/{self.training_pipeline_config.timestemp}"
+            self.s3_sync.sync_folder_to_s3(self.training_pipeline_config.model_dir, aws_bucker_url)
+        except Exception as e:
+            logger.error(f"Error in syncing saved model to s3: {str(e)}")
+            raise NetworkSecurityException(e, sys.exc_info())
+    
     def run_pipeline(self):
         try:
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact)
             data_trasnformation_artifact = self.start_data_transformation(data_validation_artifact)
             model_trainer_artifact = self.start_model_train(data_trasnformation_artifact)
+            
+            self.sync_artifact_dir_to_s3()
+            self.sync_saved_model_dir_to_s3()
+            
             return model_trainer_artifact
         except Exception as e:
             logger.error(f"Error in running pipeline: {str(e)}")
