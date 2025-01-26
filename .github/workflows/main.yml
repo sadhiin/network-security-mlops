@@ -6,11 +6,12 @@ on:
       - main
     paths-ignore:
       - 'README.md'
-  merge:
+  pull_request:
     branches:
       - main
     paths-ignore:
       - 'README.md'
+
 
 
 jobs:
