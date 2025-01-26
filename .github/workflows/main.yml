@@ -6,7 +6,7 @@ on:
       - main
     paths-ignore:
       - 'README.md'
-  merge_request:
+  merge:
     branches:
       - main
     paths-ignore:
