@@ -36,6 +36,7 @@ jobs:
   build-and-push-ecr-image:
     name: Continuous Delivery
     runs-on: ubuntu-latest
+    needs: integration  # This line ensures that this job runs only after the 'integration' job completes successfully.
 
     steps:
       - name: Checkout repository
