@@ -120,6 +120,4 @@ jobs:
         run: |
           docker system prune -f
 
-      - name: Deploy to Amazon ECS
-        run: |
-          aws ecs update-service --cluster ${{ secrets.ECS_CLUSTER_NAME }} --service ${{ secrets.ECS_SERVICE_NAME }} --force-new-deployment
+      # - name: Deploy to Amazon ec2
