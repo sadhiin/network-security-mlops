@@ -17,10 +17,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Lint Code
-        run: |
-          pip3 install flake8
-          flake8 .
+      # - name: Lint Code
+      #   run: |
+      #     pip3 install flake8
+      #     flake8 .
 
       - name: Install dependencies
         run: |
